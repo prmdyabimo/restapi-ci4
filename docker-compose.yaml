@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  db:
+    container_name: restapi-ci4
+    restart: always
+    image: postgres:16.1-alpine
+    ports:
+      - ${POSTGRES_PORT}:5432
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    env_file:
+      - .env.override
+    networks:
+      - restapi-ci4-networks
+
+  adminer:
+    container_name: restapi-ci4-adminer
+    image: adminer:latest
+    restart: always
+    ports:
+      - 3030:8080
+    networks:
+      - restapi-ci4-networks
+    depends_on:
+      - db
+
+networks:
+  restapi-ci4-networks:
+    driver: bridge
