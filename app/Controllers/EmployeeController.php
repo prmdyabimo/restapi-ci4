@@ -147,7 +147,28 @@ class EmployeeController extends ResourceController
      */
     public function edit($id = null)
     {
-        //
+        try {
+            $employee = $this->modelEmployees->find($id);
+
+            if (!$employee) {
+                return ResponseFormatter::error(
+                    null,
+                    'Data karyawan tidak ditemukan',
+                    400
+                );
+            }
+
+            return ResponseFormatter::success(
+                $employee,
+                'Data karyawan berhasil ditemukan'
+            );
+        } catch (Exception $exception) {
+            return ResponseFormatter::error(
+                null,
+                $exception->getMessage(),
+                500
+            );
+        }
     }
 
     /**
