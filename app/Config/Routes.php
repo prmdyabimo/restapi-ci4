@@ -8,5 +8,11 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::index');
 
 // API ROUTES
-$routes->resource('employee', ['controller' => 'EmployeeController']);
-$routes->resource('user', ['controller' => 'UserController']);
+$routes->group('api', function ($routes) {
+    $routes->post("login", "AuthController::doLogin");
+});
+
+$routes->group('api', ['filter' => 'authFilter'], function ($routes) {
+    $routes->resource('employees', ['controller' => 'EmployeeController']);
+    $routes->resource('users', ['controller' => 'UserController']);
+});
